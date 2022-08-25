@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@mswjs/data": "^0.8.4",
-    "@reduxjs/toolkit": "^1.6.1",
+    "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -16,8 +16,8 @@
     "msw": "^0.36.3",
     "react": "^17",
     "react-dom": "^17",
-    "react-redux": "^7.2.4",
-    "react-router-dom": "^5.1.2",
+    "react-redux": "^7.2.8",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "^4",
     "seedrandom": "^3.0.5",
     "txtgen": "^2.2.4"
