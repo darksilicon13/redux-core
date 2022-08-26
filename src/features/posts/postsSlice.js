@@ -1,6 +1,6 @@
 // postsSlice.js
-import { createSlice, nanoid } from '@reduxjs/toolkit';
-import { sub } from 'date-fns';
+import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
+import { client } from '../../api/client';
 
 const initialState = {
     posts: [],
@@ -8,17 +8,29 @@ const initialState = {
     error: null,
 }
 
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+    const response = await client.get('/fakeApi/posts');
+    // console.log(response.data);
+    return response.data;
+})
+
+export const addNewPost = createAsyncThunk(
+    'posts/addNewPost',
+    // The payload creator receives the partial `{title, content, user}` object
+    async initialPost => {
+        console.log(initialPost);
+        // Send the initial data to the fake API server
+        const response = await client.post('/fakeApi/posts', {post: initialPost});
+        // The response includes the complete post object, including unique ID
+        console.log(response);
+        return response.data;
+    }
+)
+
 const postsSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
-        reactionAdded: (state, action) => {
-            const {postId, reaction} = action.payload;
-            const existingPost = state.posts.find(post => post.id === postId)
-            if(existingPost) {
-                existingPost.reactions[reaction]++;
-            }
-        },
         postAdded: {
             reducer(state, action) {
                 state.posts.push(action.payload);
@@ -42,6 +54,13 @@ const postsSlice = createSlice({
                 }
             }
         },
+        reactionAdded: (state, action) => {
+            const { postId, reaction } = action.payload;
+            const existingPost = state.posts.find(post => post.id === postId)
+            if (existingPost) {
+                existingPost.reactions[reaction]++;
+            }
+        },
         postUpdated: (state, action) => {
             console.log(action);
             const { id, title, content, user } = action.payload;
@@ -52,6 +71,22 @@ const postsSlice = createSlice({
                 existingPost.user = user;
             }
         },
+    },
+    extraReducers: {
+        [fetchPosts.pending] : (state, action) => {
+            state.status = 'loading';
+        },
+        [fetchPosts.fulfilled] : (state, action) => {
+            state.status = 'succeeded';
+            state.posts = state.posts.concat(action.payload);
+        },
+        [fetchPosts.rejected] : (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        },
+        [addNewPost.fulfilled] : (state, action) => {
+            state.posts.push(action.payload);
+        }
     }
 })
 

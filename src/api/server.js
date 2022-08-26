@@ -13,7 +13,7 @@ const POSTS_PER_USER = 3
 const RECENT_NOTIFICATIONS_DAYS = 7
 
 // Add an extra delay to all endpoints, so loading spinners show up.
-const ARTIFICIAL_DELAY_MS = 2000
+const ARTIFICIAL_DELAY_MS = 1000
 
 /* RNG setup */
 
@@ -21,7 +21,7 @@ const ARTIFICIAL_DELAY_MS = 2000
 // a consistent set of users / entries each time the page loads.
 // This can be reset by deleting this localStorage value,
 // or turned off by setting `useSeededRNG` to false.
-let useSeededRNG = false
+let useSeededRNG = true
 
 let rng = seedrandom()
 
@@ -135,7 +135,9 @@ export const handlers = [
     return res(ctx.delay(ARTIFICIAL_DELAY_MS), ctx.json(posts))
   }),
   rest.post('/fakeApi/posts', function (req, res, ctx) {
-    const data = req.body
+    const data = req.body.post
+    // must be data.post to access incoming initialPost
+    console.log(data);
 
     if (data.content === 'error') {
       return res(
