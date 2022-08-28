@@ -297,6 +297,8 @@ function generateRandomNotifications(since, numNotifications, db) {
       date: faker.date.between(pastDate, now).toISOString(),
       message: template,
       user: user.id,
+      isNew: true,
+      read: false,
     }
   })
 
