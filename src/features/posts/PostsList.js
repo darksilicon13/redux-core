@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PostExcerpt from './PostExcerpt';
 import { fetchPosts, selectAllPosts } from './postsSlice';
+import Spinner from '../../components/Spinner';
 
 const PostsList = () => {
     const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const PostsList = () => {
     let content;
 
     if (postStatus === 'loading') {
-        content = <div className='loader'>Loading...</div>
+        content = <Spinner text="Loading..." />
     } else if (postStatus === 'succeeded') {
         const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date));
         content = orderedPosts.map(post => (

@@ -21,14 +21,15 @@ const notificationsSlice = createSlice({
     name: 'notifications',
     initialState: [],
     reducers: {
-        allNotificationsRead(state, action) {
+        allNotificationsRead: (state, action) => {
             state.forEach(notification => {
                 notification.read = true
             })
         }
     },
-    extraReducers: {
-        [fetchNotifications.fulfilled]: (state, action) => {
+    extraReducers: builder => {
+        builder
+        .addCase(fetchNotifications.fulfilled, (state, action) => {
             state.forEach(notification => {
                 // Any notification read are no longer new
                 notification.isNew = !notification.read;
@@ -36,7 +37,7 @@ const notificationsSlice = createSlice({
             state.push(...action.payload);
             // sort with newest first
             state.sort((a, b) => b.date.localeCompare(a.date));
-        }
+        })
     }
 })
 

@@ -17,7 +17,7 @@ const NotificationsList = () => {
 
     useEffect(() => {
         dispatch(allNotificationsRead());
-    })
+    }, [dispatch]);
 
     const renderedNotifications = notifications.map(notification => {
         const date = parseISO(notification.date)
@@ -25,7 +25,7 @@ const NotificationsList = () => {
         const user = users.find(user => user.id === notification.user) || {
             name: 'Unknown User'
         }
-        console.log(notification.isNew);
+
         const notificationClassname = classnames('notification', {
             new: notification.isNew
         })

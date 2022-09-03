@@ -18,11 +18,9 @@ export const addNewPost = createAsyncThunk(
     'posts/addNewPost',
     // The payload creator receives the partial `{title, content, user}` object
     async initialPost => {
-        console.log(initialPost);
         // Send the initial data to the fake API server
-        const response = await client.post('/fakeApi/posts', {post: initialPost});
+        const response = await client.post('/fakeApi/posts', initialPost);
         // The response includes the complete post object, including unique ID
-        console.log(response);
         return response.data;
     }
 )
@@ -62,7 +60,6 @@ const postsSlice = createSlice({
             }
         },
         postUpdated: (state, action) => {
-            console.log(action);
             const { id, title, content, user } = action.payload;
             const existingPost = state.posts.find(post => post.id === id);
             if (existingPost) {
@@ -72,21 +69,22 @@ const postsSlice = createSlice({
             }
         },
     },
-    extraReducers: {
-        [fetchPosts.pending] : (state, action) => {
+    extraReducers: builder => {
+        builder
+        .addCase(fetchPosts.pending, (state, action) => {
             state.status = 'loading';
-        },
-        [fetchPosts.fulfilled] : (state, action) => {
+        })
+        .addCase(fetchPosts.fulfilled, (state, action) => {
             state.status = 'succeeded';
             state.posts = state.posts.concat(action.payload);
-        },
-        [fetchPosts.rejected] : (state, action) => {
+        })
+        .addCase(fetchPosts.rejected, (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
-        },
-        [addNewPost.fulfilled] : (state, action) => {
+        })
+        .addCase(addNewPost.fulfilled, (state, action) => {
             state.posts.push(action.payload);
-        }
+        })
     }
 })
 
