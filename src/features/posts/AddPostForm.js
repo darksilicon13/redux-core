@@ -1,12 +1,13 @@
 import { unwrapResult } from '@reduxjs/toolkit';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { selectAllUsers } from '../users/usersSlice';
 import { addNewPost } from './postsSlice';
 
 export const AddPostForm = () => {
     const dispatch = useDispatch();
 
-    const users = useSelector(state => state.users);
+    const users = useSelector(selectAllUsers);
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -20,7 +21,7 @@ export const AddPostForm = () => {
 
     const canSave = [title, content, userId].every(Boolean) && addRequestStatus === 'idle';
 
-    const usersOptions = users.map(user => (
+    const usersOptions = Object.values(users).map(user => (
         <option key={user.id} value={user.id}>
             {user.name}
         </option>

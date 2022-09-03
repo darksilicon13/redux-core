@@ -7,7 +7,7 @@ import { fetchNotifications, selectAllNotifications } from '../features/notifica
 export const Navbar = () => {
   const dispatch = useDispatch();
   const notifications = useSelector(selectAllNotifications);
-  const numUnreadNotifications = notifications.filter(n=>!n.read).length;
+  const numUnreadNotifications = Object.values(notifications).filter(n=>!n.read).length;
 
   const fetchNewNotifications = () => {
     dispatch(fetchNotifications());

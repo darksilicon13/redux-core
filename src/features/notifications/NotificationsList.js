@@ -17,7 +17,7 @@ const NotificationsList = () => {
 
     useEffect(() => {
         dispatch(allNotificationsRead());
-    }, [dispatch]);
+    });
 
     const renderedNotifications = notifications.map(notification => {
         const date = parseISO(notification.date)

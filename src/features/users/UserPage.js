@@ -12,7 +12,7 @@ const UserPage = () => {
 
     const postsForUser = useSelector(state => {
         const allPosts = selectAllPosts(state);
-        return allPosts.filter(post => post.user === userId);
+        return Object.values(allPosts).filter(post => post.user === userId);
     })
 
     const postTitles = postsForUser.map(post => (

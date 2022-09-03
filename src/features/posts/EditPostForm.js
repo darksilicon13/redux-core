@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
+import { selectAllUsers } from '../users/usersSlice';
 import { postUpdated, selectPostById } from './postsSlice';
 
 
@@ -8,7 +9,7 @@ const EditPostForm = () => {
     const { postId } = useParams();
 
     const post = useSelector(state => selectPostById(state, postId))
-    const users = useSelector(state => state.users);
+    const users = useSelector(selectAllUsers);
 
     const [title, setTitle] = useState(post.title);
     const [content, setContent] = useState(post.content);

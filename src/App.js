@@ -29,9 +29,9 @@ function App() {
           } />
           <Route path="/posts/:postId" element={<SinglePostPage />} />
           <Route path="/editPost/:postId" element={<EditPostForm />} />
-          <Route path="/users" element={<UsersList/>}/>
-          <Route path="/users/:userId" element={<UserPage/>}/>
-          <Route path="/notifications" element={<NotificationsList/>}/>
+          <Route path="/users" element={<UsersList />} />
+          <Route path="/users/:userId" element={<UserPage />} />
+          <Route path="/notifications" element={<NotificationsList />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
