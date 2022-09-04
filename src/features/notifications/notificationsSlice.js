@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/too
 
 import { client } from "../../api/client";
 
-const notificationAdapter = createEntityAdapter({
+const notificationsAdapter = createEntityAdapter({
     sortComparer: (a, b) => b.date.localeCompare(a.date)
 })
 
@@ -10,12 +10,13 @@ export const fetchNotifications = createAsyncThunk(
     'notifications/fetchNotifications',
     async (_, { getState }) => {
         const allNotifications = selectAllNotifications(getState());
+        console.log(allNotifications);
         // saves the first elemnt in allNotifications to latestNotification
         // this is because state is already sorted by time
         const [latestNotification] = allNotifications;
         const latestTimestamp = latestNotification ? latestNotification.date : '';
         const response = await client.get(
-            `fakeApi/notifications?since=${latestTimestamp}`
+            `/fakeApi/notifications?since=${latestTimestamp}`
         );
         return response.data;
     }
@@ -23,7 +24,7 @@ export const fetchNotifications = createAsyncThunk(
 
 const notificationsSlice = createSlice({
     name: 'notifications',
-    initialState: notificationAdapter.getInitialState(),
+    initialState: notificationsAdapter.getInitialState(),
     reducers: {
         allNotificationsRead: (state, action) => {
             Object.values(state.entities).forEach(notification => {
@@ -38,7 +39,7 @@ const notificationsSlice = createSlice({
                 // Any notification read are no longer new
                 notification.isNew = !notification.read;
             })
-            notificationAdapter.upsertMany(state, action.payload);
+            notificationsAdapter.upsertMany(state, action.payload);
         })
     }
 })
@@ -49,4 +50,4 @@ export default notificationsSlice.reducer;
 
 export const {
     selectAll: selectAllNotifications,
-} = notificationAdapter.getSelectors(state=>state.notifications);
+} = notificationsAdapter.getSelectors(state=>state.notifications);
